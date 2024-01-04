@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const userModel = new mongoose.Schema({
+  profile: {
+    type: String
+  },
   name: { type: String },
   email: {
     type: String,
@@ -11,10 +14,8 @@ const userModel = new mongoose.Schema({
   role: { type: String },
   isDeleted: {
     type: Boolean,
-    default:false
+    default: false
   },
-  profile:{
-    type:String
-  }
+
 }, { timestamps: true })
 module.exports = mongoose.model('auth', userModel)

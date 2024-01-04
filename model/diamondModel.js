@@ -15,6 +15,10 @@ const diamondSchema = new mongoose.Schema({
   },
   polish_type: {
     type: Array
-  }
-})
+  },
+  isDeleted: {
+    type: Boolean,
+    default:false
+  },
+},{ timestamps: true })
 module.exports = mongoose.model('diamond',diamondSchema)
