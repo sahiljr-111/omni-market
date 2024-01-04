@@ -5,16 +5,16 @@ const diamondSchema = new mongoose.Schema({
     require: true
   },
   quality_of_rough: {
-    type: String
+    type: Array
   },
   cut_of_diamond: {
-    type: String
+    type: Array
   },
   polish_color: {
-    type: String,
+    type: Array,
   },
   polish_type: {
-    type: String
+    type: Array
   }
 })
 module.exports = mongoose.model('diamond',diamondSchema)

@@ -12,6 +12,9 @@ const userModel = new mongoose.Schema({
   isDeleted: {
     type: Boolean,
     default:false
+  },
+  profile:{
+    type:String
   }
 }, { timestamps: true })
 module.exports = mongoose.model('auth', userModel)
