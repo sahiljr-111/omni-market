@@ -135,6 +135,8 @@ exports.loginClient = async (req, res) => {
       if (solved) {
         req.session.email = data[0].email;
         req.session.save();
+        req.session.b_id = data[0].id
+        req.session.save();
         console.log(req.session.email);
         res.status(200).json({
           data

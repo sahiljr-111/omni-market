@@ -4,7 +4,8 @@ const user = require('../controller/userControlelr')
 const login = require('../controller/loginController')
 const seller = require('../controller/sellerController');
 const { addDiamond,viewDiamond } = require('../controller/diamondController');
-const multer  = require('multer')
+const multer  = require('multer');
+const { addPosts, viewPosts } = require('../controller/postsController');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -29,6 +30,9 @@ router.get('/view-seller',seller.viewSeller );
 
 //user
 router.get('/view-user',user.viewUser)
+router.post('/add-posts',addPosts)
+router.get('/view-posts',viewPosts)
+
 
 // admin
 router.post('/admin/add-diamond',addDiamond)
