@@ -30,8 +30,8 @@ router.get('/view-seller',seller.viewSeller );
 
 //user
 router.get('/view-user',user.viewUser)
-router.post('/add-posts',addPosts)
-router.get('/view-posts',viewPosts)
+router.post('/add-posts',user.addPosts)
+router.get('/view-posts',user.viewPosts)
 
 
 // admin
