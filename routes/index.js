@@ -3,38 +3,27 @@ var router = express.Router();
 const user = require('../controller/userControlelr')
 const login = require('../controller/loginController')
 const seller = require('../controller/sellerController');
-const { addDiamond,viewDiamond } = require('../controller/diamondController');
-const multer  = require('multer');
-const { addPosts, viewPosts } = require('../controller/postsController');
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/images')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-})
-var upload = multer({ storage: storage })
+const { addDiamond, viewDiamond } = require('../controller/diamondController');
+const { vetifyToken } = require('../middleware/auth');
 /* GET home page. */
 
 // Client authentication
-router.post('/add-client', upload.single('profile'),login.addClient );
-router.get('/login-client',login.loginClient );
-router.get('/logout-client',login.logoutClient );
-router.get('/otpverify',login.otpVerify );
+router.post('/add-client', login.addClient);
+router.get('/login-client', login.loginClient);
+router.get('/logout-client', login.logoutClient);
+router.get('/otpverify', login.otpVerify);
 
 // seller
-router.get('/view-seller',seller.viewSeller );
+router.get('/view-seller', vetifyToken, seller.viewSeller);
 
 
 //user
-router.get('/view-user',user.viewUser)
-router.post('/add-posts',user.addPosts)
-router.get('/view-posts',user.viewPosts)
+router.get('/view-user', user.viewUser)
+router.post('/add-posts', user.addPosts)
+router.get('/view-posts', user.viewPosts)
 
 
 // admin
-router.post('/admin/add-diamond',addDiamond)
-router.get('/admin/view-diamond',viewDiamond)
+router.post('/admin/add-diamond', addDiamond)
+router.get('/admin/view-diamond', viewDiamond)
 module.exports = router;
