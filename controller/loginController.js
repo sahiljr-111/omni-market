@@ -11,7 +11,7 @@ exports.addClient = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, 10)
     const data = await userModel.create(req.body);
-    var token = jwt.sign({ data }, process.env.SECRET_KEY);
+    var token = jwt.sign({ email:data.email }, process.env.SECRET_KEY);
     if (data) {
       userData[0] = data;
       var digits = '0123456789';

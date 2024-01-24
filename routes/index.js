@@ -19,8 +19,8 @@ router.get('/view-seller', vetifyToken, seller.viewSeller);
 
 //user
 router.get('/view-user', vetifyToken, user.viewUser)
-router.post('/add-posts', user.addPosts)
-router.get('/view-posts', user.viewPosts)
+router.post('/add-posts', vetifyToken,user.addPosts)
+router.get('/view-posts', vetifyToken,user.viewPosts)
 
 
 // admin
