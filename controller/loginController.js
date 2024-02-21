@@ -3,7 +3,6 @@ const userModel = require('../model/authModel')
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
 var jwt = require('jsonwebtoken');
-
 var userData = [];
 var OTP = ""
 
@@ -31,22 +30,141 @@ exports.addClient = async (req, res) => {
         from: 'omni.market07@gmail.com',
         to: req.body.email,
         subject: 'OMNI-MARKET 🌐 Secure Code - Unleash the Delivering Now!',
-        text: `🚀 Welcome to OMNI-MARKET - Your Ultimate Diamond Companion!
-        Embark on a revolutionary Marketing experience with OMNI-MARKET! We're not just an app; we're your go- to marketplace for discovering the latest trends, unlocking exclusive deals, and indulging in a seamless shopping journey.
-      
-        🎁 Your One - Time Passcode(OTP) - Your Key to Savings!
-        To enhance your shopping security, we've sent you a unique OTP. Think of it as your golden ticket to unlock exclusive features and promotions within the app.
-      
-        🔓 Redeem Your OTP: ${OTP} 
-      
-        🚨 Note: Your OTP is confidential.Do not share it with anyone.
-
-        Open OMNI-MARKET.
-        Navigate to the login screen.
-        Enter your email and use the OTP to unlock a world of savings!
-      
-        Happy Marketing!
-        The OMNI-DEVELOPER Team 🛒`
+        html: `<!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Document</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              background-color: #f2f2f2;
+              margin: 0;
+              padding: 0;
+              text-align: center;
+            }
+        
+            .header {
+              background-color: #673ab7;
+              color: #fff;
+              padding: 20px;
+              border-bottom-left-radius: 30px;
+              border-bottom-right-radius: 30px;
+            }
+        
+            .company-name {
+              font-size: 36px;
+              font-weight: bold;
+              text-transform: uppercase;
+              margin-bottom: 10px;
+            }
+        
+            .company-logo {
+              width: 100px;
+              height: auto;
+              margin-bottom: 20px;
+            }
+        
+            .ad-container {
+              background-color: #fff;
+              border-radius: 20px;
+              box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+              max-width: 500px;
+              margin: 20px auto;
+              padding: 40px;
+            }
+        
+            .otp {
+              background-color: #673ab7;
+              color: #fff;
+              padding: 10px 20px;
+              border-radius: 10px;
+              font-size: 24px;
+              font-weight: bold;
+              display: inline-block;
+              margin-bottom: 20px;
+            }
+        
+            .cta-button {
+              background-color: #673ab7;
+              color: #fff;
+              border: none;
+              border-radius: 30px;
+              padding: 15px 40px;
+              font-size: 20px;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+              text-decoration: none;
+              display: inline-block;
+              margin-top: 20px;
+            }
+        
+            .cta-button:hover {
+              background-color: #512da8;
+            }
+        
+            .instructions {
+              text-align: left;
+              margin-bottom: 20px;
+            }
+        
+            .instructions ol {
+              margin-left: 20px;
+              padding-left: 0;
+            }
+        
+            .instructions ol li {
+              margin-bottom: 10px;
+              list-style-type: decimal;
+              font-size: 18px;
+              color: #555;
+            }
+        
+            .footer {
+              color: #666;
+              font-size: 14px;
+              margin-top: 15%;
+            }
+        
+            .footer a {
+              color: #673ab7;
+              text-decoration: none;
+            }
+          </style>
+        </head>
+        
+        <body>
+          <div class="header">
+            <h1 class="company-name"> OMNI MARKET </h1>
+            <p>Your Ultimate Diamond Companion</p>
+          </div>
+          <div class="ad-container">
+            <p>🎉 Welcome to <span class="company-name">OMNI-MARKET🌐 </span></p>
+            <p>Embark on a revolutionary Marketing experience with us! We're not just an app; we're your go-to marketplace for
+              discovering the latest trends, unlocking exclusive deals, and indulging in a seamless shopping journey.</p>
+        
+            <h2>Your OTP - <span class="otp">${OTP}</span> 🤫 Keep it secret!</h2>
+            <p>To enhance your shopping security, we've sent you a unique OTP. Think of it as your golden ticket to unlock
+              exclusive features and promotions within the app.</p>
+        
+            <p></p>
+        
+            <div class="instructions">
+              <h3>Instructions:</h3>
+              <ol>
+                <li>Open OMNI-MARKET App.</li>
+                <li>Navigate to the login screen.</li>
+                <li>Enter your email and use the OTP to unlock a world of diamonds!</li>
+              </ol>
+            </div>
+        
+            <p class="footer">Happy Marketing!<br>The <span class="company-name">OMNI-MARKET</span> Team 🛒</p>
+          </div>
+        </body>
+        
+        </html>`
       };
 
       transporter.sendMail(mailOptions, function (error, info) {
@@ -76,7 +194,7 @@ exports.addClient = async (req, res) => {
 exports.loginClient = async (req, res) => {
   try {
     const data = await userModel.find({ email: req.body.email });
-    var solved = await bcrypt.compare(req.body.password, data[0].password);
+    var solved = bcrypt.compare(req.body.password, data[0].password);
     if (solved) {
       var token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY);
       res.status(200).json({

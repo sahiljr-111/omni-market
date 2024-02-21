@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-exports.vetifyToken = (req,res,next) => {
+exports.vetifyToken = (req, res, next) => {
   const token = req.headers.authentication
   if(!token){
     return res.status(401).json({
