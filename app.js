@@ -1,6 +1,6 @@
+require('dotenv').config()
 var createError = require('http-errors');
 const session = require('express-session')
-
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -16,7 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(cors())
 app.use(session({
-  secret: 'OmniSessionsKey',
+  secret: process.env.OmniSessionsKey,
   resave: true,
   saveUninitialized: true
 }))
