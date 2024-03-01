@@ -3,34 +3,42 @@ const userModel = require('../model/authModel')
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
 var jwt = require('jsonwebtoken');
+const e = require('express');
 var userData = [];
 var OTP = ""
 
 exports.addClient = async (req, res) => {
   try {
-    req.body.password = await bcrypt.hash(req.body.password, 10)
-    const data = await userModel.create(req.body);
-    var token = jwt.sign({ email:data.email }, process.env.SECRET_KEY);
-    if (data) {
-      userData[0] = data;
-      var digits = '0123456789';
-      for (let i = 0; i < 4; i++) {
-        OTP += digits[Math.floor(Math.random() * 10)];
-      }
-      console.log(OTP)
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'omni.market07@gmail.com',
-          pass: 'yougasvmbjvoourn'
+    data = req.body
+    const existingUser = await userModel.find({ email: data.email })
+    console.log('✌️existingUser --->', existingUser);
+    if (existingUser != '') {
+      res.status(400).json({
+        status: "false",
+        message: "User Already Exist!"
+      })
+    } else {
+      if (data) {
+        console.log(data);
+        userData[0] = data;
+        var digits = '0123456789';
+        for (let i = 0; i < 4; i++) {
+          OTP += digits[Math.floor(Math.random() * 10)];
         }
-      });
+        console.log(OTP)
+        var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'omni.market07@gmail.com',
+            pass: 'yougasvmbjvoourn'
+          }
+        });
 
-      var mailOptions = {
-        from: 'omni.market07@gmail.com',
-        to: req.body.email,
-        subject: 'OMNI-MARKET 🌐 Secure Code - Unleash the Delivering Now!',
-        html: `<!DOCTYPE html>
+        var mailOptions = {
+          from: 'omni.market07@gmail.com',
+          to: req.body.email,
+          subject: 'OMNI-MARKET 🌐 Secure Code - Unleash the Delivering Now!',
+          html: `<!DOCTYPE html>
         <html lang="en">
         
         <head>
@@ -165,23 +173,24 @@ exports.addClient = async (req, res) => {
         </body>
         
         </html>`
-      };
+        };
 
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-      res.status(200).json({
-        status: "Enter OTP",
-        token
-      })
-    } else {
-      res.status(400).json({
-        status: 'data not found!'
-      })
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+        res.status(200).json({
+          status: "Enter OTP",
+          // token
+        })
+      } else {
+        res.status(400).json({
+          status: 'data not found!'
+        })
+      }
     }
   } catch (error) {
     res.status(500).json({
@@ -191,12 +200,42 @@ exports.addClient = async (req, res) => {
   }
 }
 
+exports.otpVerify = async (req, res) => {
+  console.log(userData)
+  if (req.body.otp == OTP) {
+    userData[0].password = await bcrypt.hash(userData[0].password, 10)
+    const data = await userModel.create(userData[0]);
+    var token = jwt.sign({ email: data.email }, process.env.SECRET_KEY);
+    if (data.role == 'buyer') {
+      req.session.b_id = data._id
+    } else if (data.role == 'seller') {
+      req.session.s_id = data._id
+    }
+    OTP = ''
+    res.status(200).json({
+      data,
+      token
+    })
+  } else {
+    await userModel.findOneAndDelete({ email: userData[0].email })
+    res.status(200).json({
+      status: "OTP incorrect"
+    })
+  }
+}
+
 exports.loginClient = async (req, res) => {
   try {
     const data = await userModel.find({ email: req.body.email });
+    console.log(data._id);
     var solved = bcrypt.compare(req.body.password, data[0].password);
     if (solved) {
       var token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY);
+      if (data.role == 'buyer') {
+        req.session.b_id = data._id
+      } else if (data.role == 'seller') {
+        req.session.s_id = data._id
+      }
       res.status(200).json({
         data,
         token
@@ -215,19 +254,7 @@ exports.loginClient = async (req, res) => {
   }
 }
 
-exports.otpVerify = async (req, res) => {
-  console.log(userData)
-  if (req.body.otp == OTP) {
-    OTP = ''
-    res.status(200).json({
-      userData,
-    })
-  } else {
-    res.status(200).json({
-      status: "OTP incorrect"
-    })
-  }
-}
+
 
 exports.logoutClient = async (req, res) => {
   req.session.destroy();

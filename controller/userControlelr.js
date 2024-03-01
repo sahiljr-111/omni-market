@@ -42,12 +42,20 @@ exports.addPosts = async (req, res) => {
 exports.viewPosts = async (req, res) => {
   try {
     if (req.user.email) {
+      console.log('✌️(req.user.email --->', (req.user.email))
       const logUserId = req.session.b_id
       const data = await postModel.find({ buyer_id: logUserId })
-      res.status(200).json({
-        status: "Success",
-        data
-      })
+      if (data == []) {
+        res.status(200).json({
+          status: "Success",
+          data
+        })
+      } else {
+        res.status(400).json({
+          status: 'false',
+          message: "You are seller"
+        })
+      }
     } else {
       res.status(502).json({
         status: "LoginFirst",
