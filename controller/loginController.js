@@ -201,25 +201,33 @@ exports.addClient = async (req, res) => {
 }
 
 exports.otpVerify = async (req, res) => {
-  console.log(userData)
-  if (req.body.otp == OTP) {
-    userData[0].password = await bcrypt.hash(userData[0].password, 10)
-    const data = await userModel.create(userData[0]);
-    var token = jwt.sign({ email: data.email }, process.env.SECRET_KEY);
-    if (data.role == 'buyer') {
-      req.session.b_id = data._id
-    } else if (data.role == 'seller') {
-      req.session.s_id = data._id
+  try {
+    console.log(userData)
+    if (req.body.otp == OTP) {
+      userData[0].password = await bcrypt.hash(userData[0].password, 10)
+      const data = await userModel.create(userData[0]);
+      var token = jwt.sign({ email: data.email }, process.env.SECRET_KEY);
+      if (data.role == 'buyer') {
+        req.session.b_id = data._id
+      } else if (data.role == 'seller') {
+        req.session.s_id = data._id
+      }
+      OTP = ''
+      res.status(200).json({
+        data,
+        token
+      })
+    } else {
+      await userModel.findOneAndDelete({ email: userData[0].email })
+      res.status(200).json({
+        status: "OTP incorrect"
+      })
     }
-    OTP = ''
-    res.status(200).json({
-      data,
-      token
-    })
-  } else {
-    await userModel.findOneAndDelete({ email: userData[0].email })
-    res.status(200).json({
-      status: "OTP incorrect"
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error.toString()
     })
   }
 }

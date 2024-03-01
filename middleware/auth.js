@@ -1,20 +1,20 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-exports.vetifyToken = (req, res, next) => {
+exports.verifyToken = (req, res, next) => {
   const token = req.headers.authentication
-  if(!token){
+  if (!token) {
     return res.status(401).json({
-      status:"Unauthorized user"
+      status: "Unauthorized user"
     })
   }
-  try{
-    const decode = jwt.verify(token,process.env.SECRET_KEY)
+  try {
+    const decode = jwt.verify(token, process.env.SECRET_KEY)
     req.user = decode
     next()
-  }catch(error){
+  } catch (error) {
     return res.status(500).json({
-      status:"Token not marched"
+      status: "Token not marched"
     })
   }
 
