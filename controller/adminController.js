@@ -1,6 +1,8 @@
 const adminModel = require('../model/adminModel')
 const authModel = require('../model/authModel')
 const jwt = require('jsonwebtoken')
+const postsModel = require('../model/postsModel')
+const bidModel = require('../model/bidModel')
 exports.loginAdmin = async (req, res) => {
   try {
     const data = await adminModel.find({ email: req.body.email })
@@ -94,6 +96,103 @@ exports.allClient = async (req, res) => {
     console.log(error);
     res.status(500).json({
       error: error.toString()
+    })
+  }
+}
+
+exports.adminViewPosts = async (req, res) => {
+  try {
+    if (req.user.email === 'sahil' || req.user.email == 'utsav') {
+      const data = await postsModel.find()
+      res.status(200).json({
+        status: "success",
+        data
+      })
+    } else {
+      res.status(400).json({
+        status: "false",
+        message: "You are Admin but not allow to Access"
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    })
+  }
+}
+
+exports.adminViewBids = async (req, res) => {
+  try {
+    if (req.user.email === 'sahil' || req.user.email == 'utsav') {
+      const data = await bidModel.find()
+      res.status(200).json({
+        status: "success",
+        data
+      })
+    } else {
+      res.status(400).json({
+        status: "false",
+        message: "You are Admin but not allow to Access"
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    })
+  }
+}
+
+exports.sellerDetails = async (req, res) => {
+  try {
+    if (req.user.email === 'sahil' || req.user.email == 'utsav') {
+      const data = await authModel.findById({ _id: req.params.id })
+      if (data.role == 'seller') {
+        res.status(200).json({
+          status: "success",
+          data
+        })
+      } else {
+        res.status(400).json({
+          status: "false",
+          message: "Seller not found"
+        })
+      }
+    } else {
+      res.status(400).json({
+        status: "false",
+        message: "You are Admin but not allow to Access"
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    })
+  }
+}
+exports.buyerDetails = async (req, res) => {
+  try {
+    if (req.user.email === 'sahil' || req.user.email == 'utsav') {
+      const data = await authModel.findById({ _id: req.params.id })
+      if (data.role == 'buyer') {
+        res.status(200).json({
+          status: "success",
+          data
+        })
+      } else {
+        res.status(400).json({
+          status: "false",
+          message: "Buyer not found"
+        })
+      }
+    } else {
+      res.status(400).json({
+        status: "false",
+        message: "You are Admin but not allow to Access"
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
     })
   }
 }
