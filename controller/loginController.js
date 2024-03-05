@@ -235,14 +235,14 @@ exports.otpVerify = async (req, res) => {
 exports.loginClient = async (req, res) => {
   try {
     const data = await userModel.find({ email: req.body.email });
-    console.log(data._id);
     var solved = bcrypt.compare(req.body.password, data[0].password);
     if (solved) {
       var token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY);
-      if (data.role == 'buyer') {
-        req.session.b_id = data._id
-      } else if (data.role == 'seller') {
-        req.session.s_id = data._id
+      if (data[0].role === 'buyer') {
+        req.session.b_id = data[0]._id
+        console.log('session', req.session.b_id);
+      } else if (data[0].role === 'seller') {
+        req.session.s_id = data[0]._id
       }
       res.status(200).json({
         data,

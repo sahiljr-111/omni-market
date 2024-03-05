@@ -11,6 +11,7 @@ const userModel = new mongoose.Schema({
   },
   contact: { type: String },
   password: { type: String },
+  seller_category: { type: [] },
   role: { type: String },
   isDeleted: {
     type: Boolean,
