@@ -97,3 +97,56 @@ exports.allClient = async (req, res) => {
     })
   }
 }
+
+exports.chart = async (req, res) => {
+  try {
+    const data = await authModel.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: '$createdAt' }
+          },
+          totalSellers: {
+            $sum: {
+              $cond: [{ $eq: ['$role', 'seller'] }, 1, 0]
+            }
+          },
+          totalBuyers: {
+            $sum: {
+              $cond: [{ $eq: ['$role', 'buyer'] }, 1, 0]
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          month: {
+            $let: {
+              vars: {
+                monthsInString: [
+                  null,
+                  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                ]
+              },
+              in: {
+                $arrayElemAt: ['$$monthsInString', '$_id.month']
+              }
+            }
+          },
+          seller: '$totalSellers',
+          buyer: '$totalBuyers'
+        }
+      },
+      {
+        $sort: { month: 1 }
+      }
+    ]);
+    res.status(200).json({
+      status: "success",
+      data
+    })
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}

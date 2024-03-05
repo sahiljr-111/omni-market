@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const postSchema = new mongoose.Schema({
-  buyer_id: { type: String },
+  buyer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'auth', required: true },
   diamond_image: {
     type: String,
     default: null

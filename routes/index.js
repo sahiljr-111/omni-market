@@ -13,6 +13,8 @@ router.get('/logout-client', login.logoutClient);
 router.get('/otpverify', login.otpVerify);
 
 // seller
+router.post('/add-bid', verifyToken, seller.addBids);
+router.get('/view-bid', verifyToken, seller.viewBids);
 router.get('/view-seller', verifyToken, seller.viewSeller);
 
 
@@ -20,5 +22,6 @@ router.get('/view-seller', verifyToken, seller.viewSeller);
 router.get('/view-user', verifyToken, user.viewUser)
 router.post('/add-posts', verifyToken, user.addPosts)
 router.get('/view-posts', verifyToken, user.viewPosts)
+
 
 module.exports = router;
