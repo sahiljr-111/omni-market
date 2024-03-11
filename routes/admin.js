@@ -9,7 +9,7 @@ router.post('/addDiamond', verifyToken, addDiamond);
 router.get('/allSeller', verifyToken, allSeller);
 router.get('/allBuyer', verifyToken, allBuyer);
 router.get('/allClient', verifyToken, allClient);
-router.get('/viewDiamond', verifyToken, viewDiamond);
+router.get('/viewDiamond', viewDiamond);
 router.get('/viewBids', verifyToken, adminViewPosts);
 router.get('/viewPosts', verifyToken, adminViewBids);
 router.get('/chart', chart);
