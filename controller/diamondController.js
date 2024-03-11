@@ -21,8 +21,8 @@ exports.addDiamond = async (req, res) => {
 }
 exports.viewDiamond = async (req, res) => {
   try {
-    if (req.user.email === 'sahil' || req.user.email === 'utsav') {
-      const data = await diamondModel.find()
+    const data = await diamondModel.find({ isDeleted: false })
+    if (data != '') {
       res.status(200).json({
         status: "Diamond fetched successfully ",
         data
@@ -30,7 +30,7 @@ exports.viewDiamond = async (req, res) => {
     } else {
       res.status(400).json({
         status: "false",
-        message: "you are not admin"
+        message: "diamond not found"
       })
     }
   } catch (error) {

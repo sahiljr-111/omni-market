@@ -58,7 +58,7 @@ exports.viewPosts = async (req, res) => {
       console.log('->req.user.email --->', req.user.email)
       if (req.session.b_id) {
         const logUserId = req.session.b_id
-        const data = await postModel.find({ buyer_id: logUserId }).populate('buyer_id')
+        const data = await postModel.find({ buyer_id: logUserId, isDeleted: false }).populate('buyer_id', '-password')
         if (data != '') {
           res.status(200).json({
             status: "Success",

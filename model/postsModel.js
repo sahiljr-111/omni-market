@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema({
   diamond_karate: { type: String },
   diamond_qty: { type: String },
   rating: {
-    type: String,
+    type: Number,
     default: 0
   },
   isDeleted: {

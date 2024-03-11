@@ -5,7 +5,7 @@ exports.viewSeller = async (req, res) => {
   try {
     console.log(req.user.email);
     if (req.user.email) {
-      const data = await userModel.find({ role: 'seller' });
+      const data = await userModel.find({ role: 'seller', isDeleted: false }, { password: 0 });
       if (data != '') {
         res.status(200).json({
           status: "Fetching success!",
@@ -60,7 +60,7 @@ exports.viewBids = async (req, res) => {
       console.log("->session", req.session.s_id);
       if (req.session.s_id) {
         const logSellerId = req.session.s_id;
-        const data = await bidModel.find({ seller_id: logSellerId }).populate('seller_id')
+        const data = await bidModel.find({ seller_id: logSellerId, is_deleted: false }).populate('seller_id', '-password')
         if (data != '') {
           res.status(200).json({
             status: "success",
