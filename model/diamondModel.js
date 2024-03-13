@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const diamondSchema = new mongoose.Schema({
   diamond_name: {
-    type: String,
+    type: Array,
     require: true
   },
   quality_of_rough: {
@@ -18,7 +18,7 @@ const diamondSchema = new mongoose.Schema({
   },
   isDeleted: {
     type: Boolean,
-    default:false
+    default: false
   },
-},{ timestamps: true })
-module.exports = mongoose.model('diamond',diamondSchema)
+}, { timestamps: true })
+module.exports = mongoose.model('diamond', diamondSchema)
