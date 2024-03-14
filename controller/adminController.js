@@ -440,3 +440,41 @@ exports.allDeleteClient = async (req, res) => {
     })
   }
 }
+
+exports.restoreClient = async (req, res) => {
+  try {
+    const id = req.params.id
+    if (id) {
+      if (req.user.email === 'sahil' || req.user.email == 'utsav') {
+        const client = await authModel.findById({ _id: req.params.id })
+        if (client.isDeleted == true) {
+          await authModel.findByIdAndUpdate(id, { isDeleted: false })
+          const data = await authModel.findById(id)
+          res.status(200).json({
+            status: "succes",
+            data
+          })
+        } else {
+          res.status(400).json({
+            status: false,
+            message: "client is not deleted",
+          });
+        }
+      } else {
+        res.status(400).json({
+          status: false,
+          message: "login first",
+        });
+      }
+    } else {
+      res.status(400).json({
+        status: false,
+        message: "id is required",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    })
+  }
+}
