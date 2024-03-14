@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { verifyToken } = require('../middleware/auth');
-const { loginAdmin, allSeller, allBuyer, allClient, chart, adminViewBids, adminViewPosts, sellerDetails, buyerDetails } = require('../controller/adminController');
+const { loginAdmin, allSeller, allBuyer, allClient, chart, adminViewBids, adminViewPosts, sellerDetails, buyerDetails, updatebuyer, updateseller, deletebuyer, deleteseller, allDeleteClient } = require('../controller/adminController');
 const { addDiamond, viewDiamond } = require('../controller/diamondController');
 
 router.post('/login', loginAdmin);
@@ -13,6 +13,11 @@ router.get('/viewDiamond', viewDiamond);
 router.get('/viewBids', verifyToken, adminViewPosts);
 router.get('/viewPosts', verifyToken, adminViewBids);
 router.get('/chart', chart);
+router.patch('/update/buyer/:id', verifyToken, updatebuyer);
+router.patch('/update/seller/:id', verifyToken, updateseller);
+router.delete('/delete/buyer/:id', verifyToken, deletebuyer);
+router.delete('/delete/seller/:id', verifyToken, deleteseller);
+router.get('/delete/client', verifyToken, allDeleteClient);
 
 
 //individual
