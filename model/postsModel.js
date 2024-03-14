@@ -5,14 +5,15 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  diamond_name: { type: String },
-  quality_of_rough: { type: String },
-  cut_of_diamond: { type: String },
-  polish_color: { type: String },
+  diamond_name: { type: Array },
+  quality_of_rough: { type: Array },
+  cut_of_diamond: { type: Array },
+  polish_color: { type: Array },
+  polish_type: { type: Array },
   diamond_karate: { type: String },
   diamond_qty: { type: String },
   rating: {
-    type: String,
+    type: Number,
     default: 0
   },
   isDeleted: {
