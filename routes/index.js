@@ -15,6 +15,7 @@ router.get('/otpverify', login.otpVerify);
 // seller
 router.post('/add-bid', verifyToken, seller.addBids);
 router.get('/view-bid', verifyToken, seller.viewBids);
+router.get('/view-bid-post', verifyToken, seller.viewBidPost);
 router.get('/view-seller', verifyToken, seller.viewSeller);
 
 

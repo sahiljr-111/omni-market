@@ -1,3 +1,4 @@
+const authModel = require('../model/authModel');
 const userModel = require('../model/authModel')
 const postModel = require('../model/postsModel')
 
@@ -55,10 +56,11 @@ exports.addPosts = async (req, res) => {
 exports.viewPosts = async (req, res) => {
   try {
     if (req.user.email) {
-      console.log('->req.user.email --->', req.user.email)
-      if (req.session.b_id) {
-        const logUserId = req.session.b_id
-        const data = await postModel.find({ buyer_id: logUserId }).populate('buyer_id')
+      const sellerData = await authModel.find({ email: req.user.email })
+      console.log(sellerData);
+      if (sellerData[0].role == 'seller') {
+        const data = await postModel.find()
+        console.log("-----------------",data);
         if (data != '') {
           res.status(200).json({
             status: "Success",
@@ -71,12 +73,29 @@ exports.viewPosts = async (req, res) => {
           })
         }
       } else {
-        res.status(400).json({
-          status: "false",
-          message: "session is empty"
-        })
+        console.log('->req.user.email --->', req.user.email)
+        console.log('buyerSessid', req.session.b_id)
+        if (req.session.b_id) {
+          const logUserId = req.session.b_id
+          const data = await postModel.find({ buyer_id: logUserId }).populate('buyer_id')
+          if (data != '') {
+            res.status(200).json({
+              status: "Success",
+              data
+            })
+          } else {
+            res.status(400).json({
+              status: 'false',
+              message: "Data not found"
+            })
+          }
+        } else {
+          res.status(400).json({
+            status: "false",
+            message: "session is empty"
+          })
+        }
       }
-
     } else {
       res.status(502).json({
         status: "LoginFirst",
