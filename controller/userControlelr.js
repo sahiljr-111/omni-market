@@ -77,7 +77,7 @@ exports.viewPosts = async (req, res) => {
         console.log('buyerSessid', req.session.b_id)
         if (req.session.b_id) {
           const logUserId = req.session.b_id
-          const data = await postModel.find({ buyer_id: logUserId }).populate('buyer_id')
+          const data = await postModel.find({ buyer_id: logUserId }).populate('buyer_id', '-password')
           if (data != '') {
             res.status(200).json({
               status: "Success",
@@ -96,21 +96,21 @@ exports.viewPosts = async (req, res) => {
           })
         }
       }
-      console.log('->req.user.email --->', req.user.email)
-      // if (req.session.b_id) {
-      const logUserId = req.session.b_id
-      const data = await postModel.find({ isDeleted: false }).populate('buyer_id', '-password')
-      if (data != '') {
-        res.status(200).json({
-          status: "Success",
-          data
-        })
-      } else {
-        res.status(400).json({
-          status: 'false',
-          message: "Data not found"
-        })
-      }
+      // console.log('->req.user.email --->', req.user.email)
+      // // if (req.session.b_id) {
+      // const logUserId = req.session.b_id
+      // const data = await postModel.find({ isDeleted: false }).populate('buyer_id', '-password')
+      // if (data != '') {
+      //   res.status(200).json({
+      //     status: "Success",
+      //     data
+      //   })
+      // } else {
+      //   res.status(400).json({
+      //     status: 'false',
+      //     message: "Data not found"
+      //   })
+      // }
       // } else {
       //   res.status(400).json({
       //     status: "false",
