@@ -22,7 +22,7 @@ router.get('/view-seller', verifyToken, seller.viewSeller);
 //user
 router.get('/view-user', verifyToken, user.viewUser)
 router.post('/add-posts', verifyToken, user.addPosts)
-router.get('/view-posts', verifyToken, user.viewPosts)
+router.post('/view-posts', verifyToken, user.viewPosts)
 
 
 module.exports = router;
