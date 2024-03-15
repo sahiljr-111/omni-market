@@ -95,27 +95,27 @@ exports.viewBids = async (req, res) => {
 exports.viewBidPost = async (req, res) => {
   try {
     if (req.user.email) {
-      console.log('->req.user.email --->', req.user.email);
-      console.log("->session", req.session.b_id);
-      if (req.session.b_id) {
-        const data = await bidModel.find({ post_id: req.body.post_id }).populate('post_id')
-        if (data != '') {
-          res.status(200).json({
-            status: "success",
-            data
-          })
-        } else {
-          res.status(400).json({
-            status: 'false',
-            message: 'Data not Found'
-          })
-        }
+      // console.log('->req.user.email --->', req.user.email);
+      // console.log("->session", req.session.b_id);
+      // if (req.session.b_id) {
+      const data = await bidModel.find({ post_id: req.body.post_id }).populate('post_id')
+      if (data != '') {
+        res.status(200).json({
+          status: "success",
+          data
+        })
       } else {
         res.status(400).json({
-          staus: "false",
-          message: "session is empty"
+          status: 'false',
+          message: 'Data not Found'
         })
       }
+      // } else {
+      //   res.status(400).json({
+      //     staus: "false",
+      //     message: "session is empty"
+      //   })
+      // }
     } else {
       res.status(400).json({
         message: 'LoginFirst'
