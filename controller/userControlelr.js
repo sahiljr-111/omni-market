@@ -33,8 +33,8 @@ exports.addPosts = async (req, res) => {
     const data = await userModel.find({ email: req.user.email, role: 'buyer', isDeleted: false })
     if (data != '') {
       console.log("sess", req.session.b_id);
-      var logUserId = req.session.b_id;
-      req.body.buyer_id = logUserId
+      // var logUserId = req.session.b_id;
+      // req.body.buyer_id = logUserId
       var addData = await postModel.create(req.body)
       res.status(200).json({
         status: "Success",
@@ -60,7 +60,7 @@ exports.viewPosts = async (req, res) => {
       console.log(sellerData);
       if (sellerData[0].role == 'seller') {
         const data = await postModel.find()
-        console.log("-----------------",data);
+        console.log("-----------------", data);
         if (data != '') {
           res.status(200).json({
             status: "Success",
