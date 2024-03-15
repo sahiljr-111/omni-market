@@ -59,7 +59,7 @@ exports.viewPosts = async (req, res) => {
       const sellerData = await authModel.find({ email: req.user.email })
       console.log(sellerData);
       if (sellerData[0].role == 'seller') {
-        const data = await postModel.find()
+        const data = await postModel.find().populate('buyer_id', '-password')
         console.log("-----------------", data);
         if (data != '') {
           res.status(200).json({
