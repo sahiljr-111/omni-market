@@ -33,8 +33,8 @@ exports.addBids = async (req, res) => {
     const data = await userModel.find({ email: req.user.email, role: 'seller', isDeleted: false })
     if (data != '') {
       console.log("sess", req.session.s_id);
-      var logSellerId = req.session.s_id;
-      req.body.seller_id = logSellerId
+      // var logSellerId = req.session.s_id;
+      // req.body.seller_id = logSellerId
       var addData = await bidModel.create(req.body)
       res.status(200).json({
         status: "Success",
