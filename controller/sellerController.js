@@ -98,7 +98,7 @@ exports.viewBidPost = async (req, res) => {
       // console.log('->req.user.email --->', req.user.email);
       // console.log("->session", req.session.b_id);
       // if (req.session.b_id) {
-      const data = await bidModel.find({ post_id: req.body.post_id }).populate('post_id')
+      const data = await bidModel.find({ post_id: req.body.post_id }).populate('post_id').populate('seller_id')
       if (data != '') {
         res.status(200).json({
           status: "success",
