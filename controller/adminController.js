@@ -37,18 +37,18 @@ exports.loginAdmin = async (req, res) => {
 
 exports.allSeller = async (req, res) => {
   try {
-    if (req.user.email === 'sahil' || req.user.email == 'utsav') {
-      const data = await authModel.find({ role: 'seller' })
-      res.status(200).json({
-        status: "success",
-        data
-      })
-    } else {
-      res.status(400).json({
-        status: "false",
-        message: "You are Admin but not allow to Access"
-      })
-    }
+    // if (req.user.email === 'sahil' || req.user.email == 'utsav') {
+    const data = await authModel.find({ role: 'seller' })
+    res.status(200).json({
+      status: "success",
+      data
+    })
+    // } else {
+    //   res.status(400).json({
+    //     status: "false",
+    //     message: "You are Admin but not allow to Access"
+    //   })
+    // }
   } catch (error) {
     console.log(error);
     res.status(500).json({

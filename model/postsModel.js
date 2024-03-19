@@ -12,6 +12,7 @@ const postSchema = new mongoose.Schema({
   polish_type: { type: Array },
   diamond_karate: { type: String },
   diamond_qty: { type: String },
+  description: { type: String },
   rating: {
     type: String,
     default: 0

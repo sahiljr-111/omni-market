@@ -6,7 +6,7 @@ const { addDiamond, viewDiamond } = require('../controller/diamondController');
 
 router.post('/login', loginAdmin);
 router.post('/addDiamond', verifyToken, addDiamond);
-router.get('/allSeller', verifyToken, allSeller);
+router.get('/allSeller', allSeller);
 router.get('/allBuyer', verifyToken, allBuyer);
 router.get('/allClient', verifyToken, allClient);
 router.get('/viewDiamond', viewDiamond);

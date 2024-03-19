@@ -32,7 +32,7 @@ exports.addPosts = async (req, res) => {
   try {
     const data = await userModel.find({ email: req.user.email, role: 'buyer', isDeleted: false })
     if (data != '') {
-      console.log("sess", req.session.b_id);
+      console.log("sess", req.user.userId);
       // var logUserId = req.session.b_id;
       // req.body.buyer_id = logUserId
       var addData = await postModel.create(req.body)
@@ -67,14 +67,14 @@ exports.viewPosts = async (req, res) => {
             data
           })
         } else {
-          res.status(400).json({
+          res.status(200).json({
             status: 'false',
             message: "Data not found"
           })
         }
       } else {
         console.log('->req.user.email --->', req.user.email)
-        console.log('buyerSessid', req.session.b_id)
+        console.log('buyerSessid', req.user.userId)
         // if (req.session.b_id) {
         //   const logUserId = req.session.b_id
         const data = await postModel.find({ buyer_id: req.body.buyer_id }).populate('buyer_id', '-password')
@@ -84,7 +84,7 @@ exports.viewPosts = async (req, res) => {
             data
           })
         } else {
-          res.status(400).json({
+          res.status(200).json({
             status: 'false',
             message: "Data not found"
           })

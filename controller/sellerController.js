@@ -32,7 +32,7 @@ exports.addBids = async (req, res) => {
   try {
     const data = await userModel.find({ email: req.user.email, role: 'seller', isDeleted: false })
     if (data != '') {
-      console.log("sess", req.session.s_id);
+      console.log("sess", req.user.userId);
       // var logSellerId = req.session.s_id;
       // req.body.seller_id = logSellerId
       var addData = await bidModel.create(req.body)
@@ -42,7 +42,7 @@ exports.addBids = async (req, res) => {
         data,
       })
     } else {
-      res.status(502).json({
+      res.status(200).json({
         status: "You are buyer",
       })
     }
@@ -57,17 +57,18 @@ exports.viewBids = async (req, res) => {
   try {
     if (req.user.email) {
       console.log('->req.user.email --->', req.user.email);
-      console.log("->session", req.session.s_id);
-      if (req.session.s_id) {
-        const logSellerId = req.session.s_id;
-        const data = await bidModel.find({ seller_id: logSellerId, is_deleted: false }).populate('seller_id', '-password')
+      console.log("->session", req.user.userId);
+      if (req.user.userId) {
+        // const logSellerId = req.session.s_id;
+        const data = await bidModel.find({ seller_id: req.user.userId, is_deleted: false }).populate('seller_id', '-password')
+        console.log(data)
         if (data != '') {
           res.status(200).json({
             status: "success",
             data
           })
         } else {
-          res.status(400).json({
+          res.status(200).json({
             status: 'false',
             message: 'Data not Found'
           })
@@ -98,14 +99,15 @@ exports.viewBidPost = async (req, res) => {
       // console.log('->req.user.email --->', req.user.email);
       // console.log("->session", req.session.b_id);
       // if (req.session.b_id) {
-      const data = await bidModel.find({ post_id: req.body.post_id }).populate('post_id').populate('seller_id','-password')
+      const data = await bidModel.find({ post_id: req.body.post_id }).populate('post_id').populate('seller_id', '-password')
+      console.log(data)
       if (data != '') {
         res.status(200).json({
           status: "success",
           data
         })
       } else {
-        res.status(400).json({
+        res.status(200).json({
           status: 'false',
           message: 'Data not Found'
         })

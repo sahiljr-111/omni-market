@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const userModel = new mongoose.Schema({
   profile: {
-    type: String
+    type: String,
+    default:null
   },
   name: { type: String },
   email: {
