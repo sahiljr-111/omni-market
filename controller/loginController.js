@@ -207,9 +207,9 @@ exports.otpVerify = async (req, res) => {
       userData[0].password = await bcrypt.hash(userData[0].password, 10)
       const data = await userModel.create(userData[0]);
       var token = jwt.sign({ email: data.email }, process.env.SECRET_KEY);
-      if (data.role == 'buyer') {
+      if (data[0].role == 'buyer') {
         req.session.b_id = data._id
-      } else if (data.role == 'seller') {
+      } else if (data[0].role == 'seller') {
         req.session.s_id = data._id
       }
       OTP = ''
