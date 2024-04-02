@@ -4,6 +4,10 @@ const user = require("../controller/userControlelr");
 const login = require("../controller/loginController");
 const seller = require("../controller/sellerController");
 const { verifyToken } = require("../middleware/auth");
+const {
+  addContract,
+  viewContract,
+} = require("../controller/contractController");
 /* GET home page. */
 
 // Client authentication
@@ -24,5 +28,9 @@ router.post("/add-posts", verifyToken, user.addPosts);
 router.post("/view-posts", verifyToken, user.viewPosts);
 router.patch("/update-profile", user.updateProfile);
 router.delete("/delete-profile", user.deleteProfile);
+
+//contract
+router.post("/add-contract", verifyToken, addContract);
+router.post("/view-contract", verifyToken, viewContract);
 
 module.exports = router;

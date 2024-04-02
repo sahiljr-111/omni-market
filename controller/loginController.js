@@ -1,11 +1,10 @@
-require('dotenv').config()
-const userModel = require('../model/authModel')
-const bcrypt = require('bcrypt');
-var nodemailer = require('nodemailer');
-const otpModel = require('../model/otp')
-var jwt = require('jsonwebtoken');
-const e = require('express');
-
+require("dotenv").config();
+const userModel = require("../model/authModel");
+const bcrypt = require("bcrypt");
+var nodemailer = require("nodemailer");
+const otpModel = require("../model/otp");
+var jwt = require("jsonwebtoken");
+const e = require("express");
 
 exports.addClient = async (req, res) => {
   // try {
@@ -207,59 +206,57 @@ exports.addClient = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({
         status: false,
-        message: "ENUMS.USER.EMAIL_ALREADY_EXIST"
+        message: "ENUMS.USER.EMAIL_ALREADY_EXIST",
       });
     }
 
     let existingOTP = await otpModel.findOne({ email });
 
-
     if (existingOTP != null) {
       existingOTP.otp = generateOTP();
       await existingOTP.save();
       await sendVerificationEmail(email, existingOTP.otp);
-
     } else {
       const OTP = generateOTP();
-
 
       await otpModel.create({ email, otp: OTP });
       await sendVerificationEmail(email, OTP);
     }
-
-
 
     res.status(200).json({
       status: true,
       message: "ENUMS.AUTHENTICATION.SEND_OTP",
     });
   } catch (error) {
-    console.error('Error in sendotp:', error);
+    console.error("Error in sendotp:", error);
     res.status(500).json({
       status: false,
       message: "ENUMS.AUTHENTICATION.INTERNAL_SERVER_ERROR",
     });
   }
-}
+};
 
 function generateOTP() {
-  const digits = '0123456789';
-  return Array.from({ length: 6 }, () => digits[Math.floor(Math.random() * 10)]).join('');
+  const digits = "0123456789";
+  return Array.from(
+    { length: 6 },
+    () => digits[Math.floor(Math.random() * 10)]
+  ).join("");
 }
 
 async function sendVerificationEmail(email, OTP) {
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'omni.market07@gmail.com',
-      pass: 'yougasvmbjvoourn'
+      user: "omni.market07@gmail.com",
+      pass: "yougasvmbjvoourn",
     },
   });
 
   const mailOptions = {
-    from: 'omni.market07@gmail.com',
+    from: "omni.market07@gmail.com",
     to: email,
-    subject: 'OMNI-MARKET 🌐 Secure Code - Unleash the Delivering Now!',
+    subject: "OMNI-MARKET 🌐 Secure Code - Unleash the Delivering Now!",
     html: `<!DOCTYPE html>
         <html lang="en">
 
@@ -394,28 +391,29 @@ async function sendVerificationEmail(email, OTP) {
           </div>
         </body>
 
-        </html>`
+        </html>`,
   };
 
   await transporter.sendMail(mailOptions);
 }
 
-
 exports.otpVerify = async (req, res) => {
   try {
     const { otp, userData } = req.body;
-    const userWithOTP = await otpModel.findOne({ email: userData.email, otp: otp });
-    console.log('--------', userWithOTP)
+    const userWithOTP = await otpModel.findOne({
+      email: userData.email,
+      otp: otp,
+    });
     if (userWithOTP) {
-      console.log("data", userData);
-      userData.password = await bcrypt.hash(userData.password, 10)
+      userData.password = await bcrypt.hash(userData.password, 10);
 
       const data = await userModel.create(userData);
-      console.log('s', data._id)
-      const session = data._id
-      console.log(JSON.stringify(session));
+      const session = data._id;
 
-      var token = jwt.sign({ email: userData.email, userId: data._id }, process.env.SECRET_KEY);
+      var token = jwt.sign(
+        { email: userData.email, userId: data._id },
+        process.env.SECRET_KEY
+      );
       res.status(200).json({
         status: true,
         token: token,
@@ -429,20 +427,23 @@ exports.otpVerify = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Error in verifyotp:', error);
+    console.error("Error in verifyotp:", error);
     res.status(500).json({
       status: false,
       message: "ENUMS.AUTHENTICATION.INTERNAL_SERVER_ERROR",
     });
   }
-}
+};
 
 exports.loginClient = async (req, res) => {
   try {
     const data = await userModel.find({ email: req.body.email });
     var solved = bcrypt.compare(req.body.password, data[0].password);
     if (solved) {
-      var token = jwt.sign({ email: req.body.email, userId: data[0]._id }, process.env.SECRET_KEY);
+      var token = jwt.sign(
+        { email: req.body.email, userId: data[0]._id },
+        process.env.SECRET_KEY
+      );
       // if (data[0].role === 'buyer') {
       //   req.session.b_id = data[0]._id
       //   console.log('session', req.session.b_id);
@@ -451,27 +452,24 @@ exports.loginClient = async (req, res) => {
       // }
       res.status(200).json({
         data,
-        token
-      })
+        token,
+      });
     } else {
       res.status(400).json({
-        status: "Password is incorect!"
-      })
+        status: "Password is incorect!",
+      });
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     res.status(500).json({
-      error: error.toString()
-    })
+      error: error.toString(),
+    });
   }
-}
-
-
+};
 
 exports.logoutClient = async (req, res) => {
   req.session.destroy();
   res.status(200).json({
-    status: "Logout"
-  })
-}
+    status: "Logout",
+  });
+};
