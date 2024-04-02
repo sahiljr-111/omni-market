@@ -10,7 +10,7 @@ const { verifyToken } = require("../middleware/auth");
 router.post("/add-client", login.addClient);
 router.get("/login-client", login.loginClient);
 router.get("/logout-client", login.logoutClient);
-router.get("/otpverify", login.otpVerify);
+router.post("/otpverify", login.otpVerify);
 
 // seller
 router.post("/add-bid", verifyToken, seller.addBids);
