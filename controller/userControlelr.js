@@ -36,7 +36,6 @@ exports.addPosts = async (req, res) => {
       isDeleted: false,
     });
     if (data != "") {
-      console.log("sess", req.session.b_id);
       // var logUserId = req.session.b_id;
       // req.body.buyer_id = logUserId
       var addData = await postModel.create(req.body);
@@ -61,10 +60,8 @@ exports.viewPosts = async (req, res) => {
   try {
     if (req.user.email) {
       const sellerData = await authModel.find({ email: req.user.email });
-      console.log(sellerData);
       if (sellerData[0].role == "seller") {
         const data = await postModel.find().populate("buyer_id", "-password");
-        console.log("-----------------", data);
         if (data != "") {
           res.status(200).json({
             status: "Success",
@@ -77,8 +74,6 @@ exports.viewPosts = async (req, res) => {
           });
         }
       } else {
-        console.log("->req.user.email --->", req.user.email);
-        console.log("buyerSessid", req.session.b_id);
         // if (req.session.b_id) {
         //   const logUserId = req.session.b_id
         const data = await postModel
