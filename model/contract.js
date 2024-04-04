@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const contractModel = new mongoose.Schema(
   {
-    seller_id: { type: String },
+    seller_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "auth",
+    },
     post_id: { type: String },
-    buyer_id: { type: String },
+    buyer_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "auth",
+    },
     diamond_image: { type: String, default: null },
     seller_name: { type: String },
     seller_contact: { type: String },
