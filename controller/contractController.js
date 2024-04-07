@@ -23,7 +23,17 @@ exports.addContract = async (req, res) => {
 exports.viewContract = async (req, res) => {
   try {
     if (req.user.email) {
-      const data = await contractModel.find({ $or: [{ buyer_id: req.body.buyer_id }, { seller_id: req.body.seller_id }] });
+      const data = await contractModel.find({
+        $and: [
+          {
+            $or: [
+              { buyer_id: req.body.buyer_id },
+              { seller_id: req.body.seller_id }
+            ]
+          },
+          { isDeleted: false }
+        ]
+      });
       if (data != '') {
         res.status(200).json({
           status: true,

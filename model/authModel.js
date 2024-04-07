@@ -15,6 +15,10 @@ const userModel = new mongoose.Schema(
     password: { type: String },
     seller_category: { type: [] },
     role: { type: String },
+    subscription_type: { type: String, default:null },
+    start_date: { type: Date, default : null },
+    end_time: { type: Date, default:null},
+    isVerified: { type: Boolean, default: false },
     isDeleted: {
       type: Boolean,
       default: false,

@@ -97,6 +97,30 @@ exports.viewBids = async (req, res) => {
   }
 };
 
+exports.deleteBid = async (req,res)=>{
+  try {
+    const bid = await bidModel.findById(req.body.id);
+    if (!bid.is_deleted) {
+      await bidModel.findByIdAndUpdate(req.body.id, { is_deleted: true });
+      const data = await bidModel.findById(req.body.id);
+      res.status(200).json({
+        status: true,
+        message: "Bid deleted successfully",
+        data,
+      });
+    } else {
+      res.status(200).json({
+        status: false,
+        message: "Bid Already deleted",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+}
+
 exports.viewBidPost = async (req, res) => {
   try {
     if (req.user.email) {
@@ -104,7 +128,7 @@ exports.viewBidPost = async (req, res) => {
       // console.log("->session", req.session.b_id);
       // if (req.session.b_id) {
       const data = await bidModel
-        .find({ post_id: req.body.post_id })
+        .find({ post_id: req.body.post_id, is_deleted:false })
         .populate("post_id")
         .populate("seller_id", "-password");
       if (data != "") {

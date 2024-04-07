@@ -5,7 +5,7 @@ const postsModel = require("../model/postsModel");
 const bidModel = require("../model/bidModel");
 exports.loginAdmin = async (req, res) => {
   try {
-    const data = await adminModel.find({ email: req.body.email });
+    const data = await adminModel.find({ email: req.body.email, isDeleted:false });
     if (data != "") {
       if (data[0].password == req.body.password) {
         const token = jwt.sign(
@@ -18,13 +18,13 @@ exports.loginAdmin = async (req, res) => {
           token,
         });
       } else {
-        res.status(400).json({
+        res.status(200).json({
           status: "false",
           message: "Password incorrect",
         });
       }
     } else {
-      res.status(400).json({
+      res.status(200).json({
         status: "false",
         message: "Admin Not Found",
       });

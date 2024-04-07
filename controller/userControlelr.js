@@ -59,7 +59,7 @@ exports.addPosts = async (req, res) => {
 exports.viewPosts = async (req, res) => {
   try {
     if (req.user.email) {
-      const sellerData = await authModel.find({ email: req.user.email });
+      const sellerData = await authModel.find({ email: req.user.email, isDeleted:false });
       if (sellerData[0].role == "seller") {
         const data = await postModel.find().populate("buyer_id", "-password");
         if (data != "") {
@@ -77,7 +77,7 @@ exports.viewPosts = async (req, res) => {
         // if (req.session.b_id) {
         //   const logUserId = req.session.b_id
         const data = await postModel
-          .find({ buyer_id: req.body.buyer_id })
+          .find({ buyer_id: req.body.buyer_id, isDeleted:false })
           .populate("buyer_id", "-password");
         if (data != "") {
           res.status(200).json({
@@ -129,6 +129,30 @@ exports.viewPosts = async (req, res) => {
     });
   }
 };
+
+exports.deletePost = async (req,res)=>{
+  try {
+    const post = await postModel.findById(req.body.id);
+    if (!post.isDeleted) {
+      await postModel.findByIdAndUpdate(req.body.id, { isDeleted: true });
+      const data = await postModel.findById(req.body.id);
+      res.status(200).json({
+        status: true,
+        message: "Post deleted successfully",
+        data,
+      });
+    } else {
+      res.status(200).json({
+        status: false,
+        message: "Post Already deleted",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+}
 
 exports.updateProfile = async (req, res) => {
   try {
