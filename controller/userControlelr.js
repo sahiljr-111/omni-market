@@ -68,7 +68,7 @@ exports.viewPosts = async (req, res) => {
             data,
           });
         } else {
-          res.status(400).json({
+          res.status(200).json({
             status: "false",
             message: "Data not found",
           });
@@ -85,7 +85,7 @@ exports.viewPosts = async (req, res) => {
             data,
           });
         } else {
-          res.status(400).json({
+          res.status(200).json({
             status: "false",
             message: "Data not found",
           });
