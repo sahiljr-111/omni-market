@@ -19,7 +19,7 @@ const userModel = new mongoose.Schema(
     start_date: { type: Date, default : null },
     end_time: { type: Date, default:null},
     isVerified: { type: Boolean, default: false },
-    ucm_token:{type:String, default:null},
+    fcm_token:{type:String, default:null},
     isDeleted: {
       type: Boolean,
       default: false,
