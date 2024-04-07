@@ -33,31 +33,41 @@ exports.viewSeller = async (req, res) => {
 
 exports.addBids = async (req, res) => {
   try {
-    const data = await userModel.find({
-      email: req.user.email,
-      role: "seller",
-      isDeleted: false,
-    });
-    if (data != "") {
-      console.log("sess", req.user.userId);
-      // var logSellerId = req.session.s_id;
-      // req.body.seller_id = logSellerId
-      var addData = await bidModel.create(req.body);
+    const existingBid = await bidModel.find({ seller_id: req.body.seller_id, post_id: req.body.post_id, is_deleted:false })
+    console.log(existingBid);
+    if (existingBid != '') {
       res.status(200).json({
-        status: "Success",
-        addData,
-        data,
-      });
+        status: false,
+        msg: "You are already add bid on this post!"
+      })
     } else {
-      res.status(200).json({
-        status: "You are buyer",
+      const data = await userModel.find({
+        email: req.user.email,
+        role: "seller",
+        isDeleted: false,
       });
+      if (data != "") {
+        console.log("sess", req.user.userId);
+        // var logSellerId = req.session.s_id;
+        // req.body.seller_id = logSellerId
+        var addData = await bidModel.create(req.body);
+        res.status(200).json({
+          status: "Success",
+          addData,
+          data,
+        });
+      } else {
+        res.status(200).json({
+          status: "You are buyer",
+        });
+      }
     }
   } catch (error) {
     res.status(500).json({
       error: error.message,
     });
   }
+
 };
 
 exports.viewBids = async (req, res) => {
@@ -97,7 +107,7 @@ exports.viewBids = async (req, res) => {
   }
 };
 
-exports.deleteBid = async (req,res)=>{
+exports.deleteBid = async (req, res) => {
   try {
     const bid = await bidModel.findById(req.body.id);
     if (!bid.is_deleted) {
@@ -128,7 +138,7 @@ exports.viewBidPost = async (req, res) => {
       // console.log("->session", req.session.b_id);
       // if (req.session.b_id) {
       const data = await bidModel
-        .find({ post_id: req.body.post_id, is_deleted:false })
+        .find({ post_id: req.body.post_id, is_deleted: false })
         .populate("post_id")
         .populate("seller_id", "-password");
       if (data != "") {

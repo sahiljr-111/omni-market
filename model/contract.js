@@ -5,7 +5,9 @@ const contractModel = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "auth",
     },
-    post_id: { type: String },
+    post_id: {
+      type:String,
+    },
     buyer_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "auth",

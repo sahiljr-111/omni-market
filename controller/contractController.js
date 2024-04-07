@@ -1,4 +1,5 @@
-const contractModel = require('../model/contract')
+const contractModel = require('../model/contract');
+const postsModel = require('../model/postsModel');
 exports.addContract = async (req, res) => {
   try {
     if (req.user.email) {
@@ -24,26 +25,29 @@ exports.viewContract = async (req, res) => {
   try {
     if (req.user.email) {
       const data = await contractModel.find({
-        $and: [
-          {
-            $or: [
-              { buyer_id: req.body.buyer_id },
-              { seller_id: req.body.seller_id }
-            ]
-          },
-          { isDeleted: false }
+        $or: [
+          { buyer_id: req.body.buyer_id },
+          { seller_id: req.body.seller_id }
         ]
       });
-      if (data != '') {
-        res.status(200).json({
-          status: true,
-          data
-        })
-      } else {
+      const postdata = await postsModel.findById({ _id: data[0].post_id })
+      if (postdata.isDeleted == true) {
         res.status(200).json({
           status: false,
-          message: "Data not found"
+          msg: "post is deleted"
         })
+      } else {
+        if (data != '') {
+          res.status(200).json({
+            status: true,
+            data
+          })
+        } else {
+          res.status(200).json({
+            status: false,
+            message: "Data not found"
+          })
+        }
       }
     } else {
       res.status(200).json({

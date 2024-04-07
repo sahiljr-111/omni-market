@@ -288,8 +288,8 @@ exports.logoutClient = async (req, res) => {
 exports.addSubscription = async (req, res) => {
   try {
     const { id, subscription_type } = req.body;
-    const start_date = new Date();
-    let end_date;
+    var start_date = new Date();
+    var end_date;
 
     switch (subscription_type) {
       case 'platinum':
