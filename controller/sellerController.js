@@ -33,7 +33,7 @@ exports.viewSeller = async (req, res) => {
 
 exports.addBids = async (req, res) => {
   try {
-    const existingBid = await bidModel.find({ seller_id: req.body.seller_id, post_id: req.body.post_id, is_deleted:false })
+    const existingBid = await bidModel.find({ seller_id: req.body.seller_id, post_id: req.body.post_id })
     console.log(existingBid);
     if (existingBid != '') {
       res.status(200).json({
