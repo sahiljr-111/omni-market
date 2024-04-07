@@ -3,6 +3,7 @@ const authModel = require("../model/authModel");
 const jwt = require("jsonwebtoken");
 const postsModel = require("../model/postsModel");
 const bidModel = require("../model/bidModel");
+const contractModel = require("../model/contract");
 exports.loginAdmin = async (req, res) => {
   try {
     const data = await adminModel.find({ email: req.body.email, isDeleted:false });
@@ -198,6 +199,27 @@ exports.buyerDetails = async (req, res) => {
     });
   }
 };
+
+exports.viewAllContracts = async (req,res)=>{
+  try {
+    const data =await contractModel.find({}).populate('buyer_id').populate('seller_id')
+    if(data != ''){
+      res.status(200).json({
+        status:true,
+        data:data
+      })
+    }else{
+      res.status(200).json({
+        status:false,
+        msg:"Data not found!"
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+}
 
 exports.chart = async (req, res) => {
   try {

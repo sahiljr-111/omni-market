@@ -17,6 +17,7 @@ const {
   deleteseller,
   allDeleteClient,
   restoreClient,
+  viewAllContracts,
 } = require("../controller/adminController");
 const { addDiamond, viewDiamond } = require("../controller/diamondController");
 
@@ -28,6 +29,7 @@ router.get("/allClient", verifyToken, allClient);
 router.get("/viewDiamond", viewDiamond);
 router.get("/viewPosts", verifyToken, adminViewPosts);
 router.get("/viewBids", verifyToken, adminViewBids);
+router.get("/viewContracts", verifyToken, viewAllContracts);
 router.get("/chart", chart);
 router.patch("/update/buyer/:id", verifyToken, updatebuyer);
 router.patch("/update/seller/:id", verifyToken, updateseller);
