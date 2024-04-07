@@ -27,7 +27,7 @@ router.delete("/delete-bid", verifyToken, seller.deleteBid);
 router.get("/view-user", verifyToken, user.viewUser);
 router.post("/add-posts", verifyToken, user.addPosts);
 router.post("/view-posts", verifyToken, user.viewPosts);
-router.post("/delete-posts", verifyToken, user.viewPosts);
+router.post("/delete-posts", verifyToken, user.deletePosts);
 router.patch("/update-profile", user.updateProfile);
 router.delete("/delete-profile", user.deleteProfile);
 
