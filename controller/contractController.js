@@ -32,7 +32,7 @@ exports.viewContract = async (req, res) => {
       } else {
         res.status(200).json({
           status: false,
-          message: "data is empty"
+          message: "Data not found"
         })
       }
     } else {
