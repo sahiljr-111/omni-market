@@ -292,13 +292,13 @@ exports.addSubscription = async (req, res) => {
     var end_date;
 
     switch (subscription_type) {
-      case 'platinum':
+      case 'Platinum':
         end_date = new Date(start_date.getFullYear() + 1, start_date.getMonth(), start_date.getDate());
         break;
-      case 'gold':
+      case 'Gold':
         end_date = new Date(start_date.getFullYear(), start_date.getMonth() + 6, start_date.getDate());
         break;
-      case 'silver':
+      case 'Silver':
         end_date = new Date(start_date.getFullYear(), start_date.getMonth() + 1, start_date.getDate());
         break;
       default:
