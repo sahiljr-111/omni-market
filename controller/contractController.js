@@ -29,6 +29,12 @@ exports.viewContract = async (req, res) => {
         { seller_id: req.body.seller_id }
       ]
     });
+    if(data ==''){
+      res.status(200).json({
+        status: false,
+        message: "Data not found"
+      })
+    }
     const postdata = await postsModel.findById({ _id: data[0].post_id })
     if (postdata.isDeleted == true) {
       res.status(200).json({
